@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ post.title }} - ZenPaw Tech{% endblock %}
+
+{% block body %}
+<article>
+    <header>
+        <h1>{{ post.title }}</h1>
+        <p>
+            <small>
+                📅 Publicado el {{ post.publishedAt|date('d/m/Y H:i') }}
+            </small>
+        </p>
+        <hr>
+    </header>
+
+    <div class="post-content" style="line-height: 1.8; margin: 2rem 0;">
+
+        {{ post.content|nl2br }}
+
+
+    </div>
+
+    <footer style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--pico-muted-border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="{{ path('app_blog') }}" role="button" class="secondary">
+                ← Volver al blog
+            </a>
+
+            <div style="color: var(--pico-muted-color); font-size: 0.9rem;">
+                <small>Slug: <code>{{ post.slug }}</code></small>
+            </div>
+        </div>
+    </footer>
+</article>
+
+{# Estilos adicionales para mejorar la legibilidad del contenido #}
+<style>
+    .post-content {
+        font-size: 1.1rem;
+        color: var(--pico-color);
+    }
+
+    .post-content p {
+        margin-bottom: 1.5rem;
+    }
+
+    article header h1 {
+        margin-bottom: 0.5rem;
+        color: var(--pico-primary);
+    }
+
+    article header hr {
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    code {
+        background-color: var(--pico-code-background-color);
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+        font-size: 0.9em;
+    }
+</style>
+{% endblock %}

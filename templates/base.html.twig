@@ -1,138 +1,13 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}ZenPaw Tech - Blog{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🐾</text></svg>">
 
-        <!-- Pico.css - Framework CSS minimalista -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-
-        <!-- Estilos personalizados para el sidebar -->
-        <style>
-            :root {
-                --sidebar-width: 250px;
-            }
-
-            body {
-                margin: 0;
-                padding: 0;
-            }
-
-            .layout-container {
-                display: flex;
-                min-height: 100vh;
-                flex-direction: column;
-            }
-
-            .content-wrapper {
-                display: flex;
-                flex: 1;
-            }
-
-            .sidebar {
-                width: var(--sidebar-width);
-                background-color: var(--pico-background-color);
-                border-right: 1px solid var(--pico-muted-border-color);
-                padding: 2rem 1rem;
-                position: sticky;
-                top: 0;
-                height: 100vh;
-                overflow-y: auto;
-            }
-
-            .sidebar h3 {
-                margin-top: 0;
-                color: var(--pico-primary);
-            }
-
-            .sidebar nav ul {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-            }
-
-            .sidebar nav ul li {
-                margin-bottom: 0.5rem;
-            }
-
-            .sidebar nav ul li a {
-                display: block;
-                padding: 0.5rem 1rem;
-                text-decoration: none;
-                color: var(--pico-color);
-                border-radius: 4px;
-                transition: background-color 0.2s;
-            }
-
-            .sidebar nav ul li a:hover {
-                background-color: var(--pico-secondary-background);
-            }
-
-            .sidebar nav ul li a.active {
-                background-color: var(--pico-primary);
-                color: white;
-            }
-
-            main {
-                flex: 1;
-                padding: 2rem;
-                max-width: 1200px;
-            }
-
-            header {
-                background-color: var(--pico-primary);
-                color: white;
-                padding: 1rem 2rem;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }
-
-            header h1 {
-                margin: 0;
-                font-size: 1.5rem;
-            }
-
-            header p {
-                margin: 0.25rem 0 0 0;
-                opacity: 0.9;
-                font-size: 0.9rem;
-            }
-
-            footer {
-                background-color: var(--pico-card-background-color);
-                border-top: 1px solid var(--pico-muted-border-color);
-                padding: 1.5rem 2rem;
-                text-align: center;
-                color: var(--pico-muted-color);
-            }
-
-            .sidebar-section {
-                margin-bottom: 2rem;
-            }
-
-            .sidebar-section h4 {
-                font-size: 0.9rem;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-                color: var(--pico-muted-color);
-                margin-bottom: 0.5rem;
-            }
-
-            @media (max-width: 768px) {
-                .content-wrapper {
-                    flex-direction: column;
-                }
-
-                .sidebar {
-                    width: 100%;
-                    height: auto;
-                    position: relative;
-                    border-right: none;
-                    border-bottom: 1px solid var(--pico-muted-border-color);
-                }
-            }
-        </style>
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
 
         {% block stylesheets %}
         {% endblock %}
@@ -141,60 +16,88 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
-        <div class="layout-container">
+    <body class="bg-gray-50">
+        <div class="flex flex-col min-h-screen">
             <!-- Header -->
-            <header>
-                <h1>🐾 ZenPaw Tech</h1>
-                <p>Blog de tecnología y desarrollo</p>
+            <header class="bg-blue-600 text-white px-8 py-4 shadow-md">
+                <h1 class="text-2xl font-bold m-0">🐾 ZenPaw Tech</h1>
+                <p class="text-sm opacity-90 mt-1">Blog de tecnología y desarrollo</p>
             </header>
 
             <!-- Content wrapper con sidebar y main -->
-            <div class="content-wrapper">
+            <div class="flex flex-1 flex-col md:flex-row">
                 <!-- Sidebar -->
-                <aside class="sidebar">
-                    <div class="sidebar-section">
-                        <h3>Navegación</h3>
+                <aside class="w-full md:w-64 bg-white border-b md:border-b-0 md:border-r border-gray-200 p-8 md:sticky md:top-0 md:h-screen md:overflow-y-auto">
+                    <div class="mb-8">
+                        <h3 class="text-lg font-bold text-blue-600 mt-0 mb-4">Navegación</h3>
                         <nav>
-                            <ul>
-                                <li><a href="{{ path('app_blog') }}" {% if app.request.attributes.get('_route') == 'app_blog' %}class="active"{% endif %}>🏠 Inicio</a></li>
-                                <li><a href="#">📝 Nuevo Post</a></li>
-                                <li><a href="#">📚 Categorías</a></li>
-                                <li><a href="#">🏷️ Etiquetas</a></li>
+                            <ul class="list-none p-0 m-0">
+                                <li class="mb-2">
+                                    <a href="{{ path('app_blog') }}" class="block px-4 py-2 rounded transition-colors duration-200 no-underline {% if app.request.attributes.get('_route') == 'app_blog' %}bg-blue-600 text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+                                        🏠 Inicio
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="{{ path('app_category_index') }}" class="block px-4 py-2 rounded transition-colors duration-200 no-underline {% if app.request.attributes.get('_route') starts with 'app_category' %}bg-blue-600 text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+                                        📚 Categorías
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="{{ path('app_about') }}" class="block px-4 py-2 rounded transition-colors duration-200 no-underline {% if app.request.attributes.get('_route') == 'app_about' %}bg-blue-600 text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+                                        ℹ️ Acerca de
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="block px-4 py-2 rounded transition-colors duration-200 no-underline text-gray-400 cursor-not-allowed">
+                                        🏷️ Etiquetas
+                                    </a>
+                                </li>
                             </ul>
                         </nav>
                     </div>
 
-                    <div class="sidebar-section">
-                        <h4>Acerca de</h4>
-                        <p style="font-size: 0.9rem; color: var(--pico-muted-color);">
+                    <div class="mb-8">
+                        <h4 class="text-xs uppercase tracking-wide text-gray-500 mb-2">Acerca de</h4>
+                        <p class="text-sm text-gray-600">
                             Blog dedicado a compartir conocimientos sobre desarrollo web, programación y tecnología.
                         </p>
                     </div>
 
-                    <div class="sidebar-section">
-                        <h4>Enlaces</h4>
+                    <div class="mb-8">
+                        <h4 class="text-xs uppercase tracking-wide text-gray-500 mb-2">Enlaces</h4>
                         <nav>
-                            <ul>
-                                <li><a href="#">GitHub</a></li>
-                                <li><a href="#">Twitter</a></li>
-                                <li><a href="#">LinkedIn</a></li>
+                            <ul class="list-none p-0 m-0">
+                                <li class="mb-2">
+                                    <a href="#" class="block px-4 py-2 rounded transition-colors duration-200 no-underline text-gray-700 hover:bg-gray-100">
+                                        GitHub
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="block px-4 py-2 rounded transition-colors duration-200 no-underline text-gray-700 hover:bg-gray-100">
+                                        Twitter
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="block px-4 py-2 rounded transition-colors duration-200 no-underline text-gray-700 hover:bg-gray-100">
+                                        LinkedIn
+                                    </a>
+                                </li>
                             </ul>
                         </nav>
                     </div>
                 </aside>
 
                 <!-- Main content -->
-                <main>
+                <main class="flex-1 p-8 max-w-screen-xl">
                     {% block body %}{% endblock %}
                 </main>
             </div>
 
             <!-- Footer -->
-            <footer>
+            <footer class="bg-white border-t border-gray-200 px-8 py-6 text-center text-gray-600">
                 <p>&copy; {{ "now"|date("Y") }} ZenPaw Tech. Todos los derechos reservados.</p>
-                <p>
-                    <small>Desarrollado con ❤️ usando Symfony y Pico.css</small>
+                <p class="mt-2">
+                    <small>Desarrollado con ❤️ usando Symfony y Tailwind CSS</small>
                 </p>
             </footer>
         </div>

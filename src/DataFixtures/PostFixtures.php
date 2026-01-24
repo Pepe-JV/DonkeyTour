@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Category;
 use App\Entity\Post;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -10,6 +11,31 @@ class PostFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        // Crear categorías primero
+        $categorySymfony = new Category();
+        $categorySymfony->setName('Symfony');
+        $categorySymfony->setSlug('symfony');
+        $categorySymfony->setDescription('Todo sobre el framework Symfony y sus componentes');
+        $manager->persist($categorySymfony);
+
+        $categoryPHP = new Category();
+        $categoryPHP->setName('PHP');
+        $categoryPHP->setSlug('php');
+        $categoryPHP->setDescription('Desarrollo y buenas prácticas en PHP');
+        $manager->persist($categoryPHP);
+
+        $categoryFrontend = new Category();
+        $categoryFrontend->setName('Frontend');
+        $categoryFrontend->setSlug('frontend');
+        $categoryFrontend->setDescription('Desarrollo frontend, CSS, JavaScript y más');
+        $manager->persist($categoryFrontend);
+
+        $categoryDatabase = new Category();
+        $categoryDatabase->setName('Base de Datos');
+        $categoryDatabase->setSlug('base-de-datos');
+        $categoryDatabase->setDescription('Gestión y optimización de bases de datos');
+        $manager->persist($categoryDatabase);
+
         // Post 1: Introducción a Symfony
         $post1 = new Post();
         $post1->setTitle('Introducción a Symfony 7');
@@ -27,6 +53,9 @@ class PostFixtures extends Fixture
             "¡Y estarás listo para crear aplicaciones web profesionales!"
         );
         $post1->setPublishedAt(new \DateTime('2026-01-15 10:30:00'));
+        $post1->setAuthor('María González');
+        $post1->addCategory($categorySymfony);
+        $post1->addCategory($categoryPHP);
         $manager->persist($post1);
 
         // Post 2: Doctrine ORM
@@ -47,6 +76,9 @@ class PostFixtures extends Fixture
             "Olvídate del SQL manual y enfócate en tu lógica de negocio."
         );
         $post2->setPublishedAt(new \DateTime('2026-01-18 14:45:00'));
+        $post2->setAuthor('Carlos Rodríguez');
+        $post2->addCategory($categoryDatabase);
+        $post2->addCategory($categorySymfony);
         $manager->persist($post2);
 
         // Post 3: Twig Templates
@@ -70,6 +102,9 @@ class PostFixtures extends Fixture
             "¡Es la herramienta perfecta para crear interfaces de usuario profesionales!"
         );
         $post3->setPublishedAt(new \DateTime('2026-01-21 09:15:00'));
+        $post3->setAuthor('Laura Martínez');
+        $post3->addCategory($categoryFrontend);
+        $post3->addCategory($categorySymfony);
         $manager->persist($post3);
 
         // Guardar todos los posts en la base de datos

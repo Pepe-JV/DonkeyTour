@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Acerca de - ZenPaw Tech{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto">
+    <!-- Hero Section -->
+    <div class="mb-12 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Acerca de ZenPaw Tech
+        </h1>
+        <p class="text-lg text-gray-600">
+            Tu fuente de conocimiento en desarrollo web y tecnología
+        </p>
+    </div>
+
+    <!-- Content -->
+    <div class="bg-white rounded-xl shadow-lg p-8 md:p-12">
+        <div class="prose prose-lg max-w-none">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">¿Quiénes somos?</h2>
+
+            <p class="text-gray-700 leading-relaxed mb-6">
+                ZenPaw Tech es un blog dedicado a compartir conocimientos sobre desarrollo web,
+                programación y las últimas tendencias en tecnología. Nuestro objetivo es proporcionar
+                contenido de calidad que ayude a desarrolladores de todos los niveles a mejorar sus habilidades.
+            </p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mb-4 mt-8">Nuestra Misión</h3>
+
+            <p class="text-gray-700 leading-relaxed mb-6">
+                Creemos en el poder del conocimiento compartido. Nuestra misión es crear una comunidad
+                donde los desarrolladores puedan aprender, crecer y compartir sus experiencias en el
+                mundo del desarrollo web y la tecnología moderna.
+            </p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mb-4 mt-8">¿Qué encontrarás aquí?</h3>
+
+            <ul class="list-disc list-inside text-gray-700 space-y-3 mb-6">
+                <li>Tutoriales detallados sobre Symfony y PHP</li>
+                <li>Guías de desarrollo web moderno</li>
+                <li>Mejores prácticas de programación</li>
+                <li>Consejos y trucos para desarrolladores</li>
+                <li>Análisis de tecnologías emergentes</li>
+            </ul>
+
+            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 mt-8 border border-blue-200">
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Contáctanos</h3>
+                <p class="text-gray-700 leading-relaxed">
+                    ¿Tienes preguntas o sugerencias? Nos encantaría escucharte.
+                    Puedes contactarnos a través de nuestras redes sociales o enviarnos un correo.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Home -->
+    <div class="mt-8 text-center">
+        <a href="{{ path('app_blog') }}"
+           class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg no-underline">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Volver al inicio
+        </a>
+    </div>
+</div>
+{% endblock %}

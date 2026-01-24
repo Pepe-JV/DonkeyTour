@@ -32,4 +32,10 @@ final class BlogController extends AbstractController
             'post' => $post,
         ]);
     }
+
+    #[Route('/acerca-de', name: 'app_about')]
+    public function about(): Response
+    {
+        return $this->render('blog/about.html.twig');
+    }
 }

@@ -2,26 +2,26 @@
 
 {% block title %}Crear Cuenta — DonkeyTour{% endblock %}
 
-{% block body %}
-<div class="h-screen w-full bg-[#fcfaf7] flex items-center justify-center p-4 relative overflow-hidden">
-    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-[#4A90A4] rounded-full blur-3xl opacity-10"></div>
+{% block public_body %}
+    <div class="h-screen w-full bg-[#fcfaf7] flex items-center justify-center p-4 relative overflow-hidden">
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-[#4A90A4] rounded-full blur-3xl opacity-10"></div>
 
-    <div class="w-full max-w-2xl z-10 flex flex-col items-center transform scale-[0.85] md:scale-90 lg:scale-100 transition-transform duration-500">
-        
-        <div class="flex flex-col items-center mb-4 animate-fade-in-down">
-            <div class="relative group">
-                <div class="absolute -inset-4 bg-gradient-to-tr from-amber-200 to-transparent rounded-full blur-2xl opacity-40"></div>
-                <img src="{{ asset('img/logoDonkey_sinFondo.png') }}" 
-                     alt="DonkeyTour" 
-                     class="relative w-28 h-28 md:w-36 md:h-36 object-contain drop-shadow-md">
+        <div class="w-full max-w-2xl z-10 flex flex-col items-center transform scale-[0.85] md:scale-90 lg:scale-100 transition-transform duration-500">
+
+            <div class="flex flex-col items-center mb-4 animate-fade-in-down">
+                <div class="relative group">
+                    <div class="absolute -inset-4 bg-gradient-to-tr from-amber-200 to-transparent rounded-full blur-2xl opacity-40"></div>
+                    <img src="{{ asset('img/logoDonkey_sinFondo.png') }}"
+                         alt="DonkeyTour"
+                         class="relative w-28 h-28 md:w-36 md:h-36 object-contain drop-shadow-md">
+                </div>
+                <h1 class="text-2xl font-serif font-extrabold text-[#3E2F28] tracking-tight mt-2">Únete a la expedición</h1>
             </div>
-            <h1 class="text-2xl font-serif font-extrabold text-[#3E2F28] tracking-tight mt-2">Únete a la expedición</h1>
-        </div>
 
-        <div class="w-full bg-white/80 backdrop-blur-xl rounded-[2.5rem] shadow-[0_20px_50px_rgba(139,94,60,0.15)] p-6 md:p-10 border border-white">
-            
-            {{ form_start(registrationForm, {'attr': {'class': 'space-y-4', 'novalidate': 'novalidate'}}) }}
-                
+            <div class="w-full bg-white/80 backdrop-blur-xl rounded-[2.5rem] shadow-[0_20px_50px_rgba(139,94,60,0.15)] p-6 md:p-10 border border-white">
+
+                {{ form_start(registrationForm, {'attr': {'class': 'space-y-4', 'novalidate': 'novalidate'}}) }}
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {# Nombre #}
                     <div class="space-y-1">
@@ -60,33 +60,40 @@
                     <label class="text-[11px] text-stone-500">Acepto los términos de servicio.</label>
                 </div>
 
-                <button type="submit" 
+                <button type="submit"
                         class="w-full py-3 px-4 font-bold rounded-xl text-white bg-[#8B5E3C] hover:bg-[#764f32] transition-all shadow-lg shadow-amber-900/20">
                     Crear mi cuenta
                 </button>
 
-            {{ form_end(registrationForm) }}
+                {{ form_end(registrationForm) }}
 
-            <div class="mt-4 pt-4 border-t border-stone-100 text-center">
-                <p class="text-stone-500 text-xs">
-                    ¿Ya eres un aventurero? 
-                    <a href="{{ path('app_login') }}" class="text-[#4A90A4] font-bold hover:underline ml-1">Inicia sesión</a>
-                </p>
+                <div class="mt-4 pt-4 border-t border-stone-100 text-center">
+                    <p class="text-stone-500 text-xs">
+                        ¿Ya eres un aventurero?
+                        <a href="{{ path('app_login') }}" class="text-[#4A90A4] font-bold hover:underline ml-1">Inicia sesión</a>
+                    </p>
+                </div>
             </div>
-        </div>
-        
-        <p class="mt-4 text-stone-400 text-[9px] uppercase tracking-[0.2em]">
-            &copy; DonkeyTour - Granada
-        </p>
-    </div>
-</div>
 
-<style>
-    /* Forzar que el body no tenga scroll bajo ningún concepto */
-    body, html {
-        margin: 0;
-        height: 100%;
-        overflow: hidden !important;
-    }
-</style>
+            <p class="mt-4 text-stone-400 text-[9px] uppercase tracking-[0.2em]">
+                &copy; DonkeyTour - Granada
+            </p>
+        </div>
+    </div>
+
+    <style>
+        /* Forzar que el body no tenga scroll bajo ningún concepto */
+        body, html {
+            margin: 0;
+            height: 100%;
+            overflow: hidden !important;
+        }
+        .animate-fade-in-down {
+            animation: fadeInDown 0.8s ease-out forwards;
+        }
+        @keyframes fadeInDown {
+            0% { opacity: 0; transform: translateY(-15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 {% endblock %}

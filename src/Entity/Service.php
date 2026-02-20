@@ -16,7 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
     'service' => Service::class,
     'despedida' => Despedida::class,
     'therapy' => Therapy::class,
-    'tour' => Tour::class
+    'tour' => Tour::class,
+    'sponsorship' => Sponsorship::class
 ])]
 
 class Service

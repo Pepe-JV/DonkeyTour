@@ -24,6 +24,12 @@ class ClientReserve
     #[ORM\OneToMany(targetEntity: Reserve::class, mappedBy: 'clientReserve')]
     private Collection $reserve;
 
+    #[ORM\Column]
+    private ?bool $reserveWho = null;
+
+    #[ORM\ManyToOne(inversedBy: 'clientReserves')]
+    private ?Client $clientAssist = null;
+
     public function __construct()
     {
         $this->reserve = new ArrayCollection();
@@ -72,6 +78,30 @@ class ClientReserve
                 $reserve->setClientReserve(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isReserveWho(): ?bool
+    {
+        return $this->reserveWho;
+    }
+
+    public function setReserveWho(bool $reserveWho): static
+    {
+        $this->reserveWho = $reserveWho;
+
+        return $this;
+    }
+
+    public function getClientAssist(): ?Client
+    {
+        return $this->clientAssist;
+    }
+
+    public function setClientAssist(?Client $clientAssist): static
+    {
+        $this->clientAssist = $clientAssist;
 
         return $this;
     }

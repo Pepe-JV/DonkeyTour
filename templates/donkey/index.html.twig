@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Donkey index{% endblock %}
+
+{% block client_body %}
+    <h1>Donkey index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Years</th>
+                <th>Race</th>
+                <th>Kilogram</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>DeletedAt</th>
+                <th>Disponible</th>
+                <th>MaxWeightr</th>
+                <th>PhotoUrl</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for donkey in donkeys %}
+            <tr>
+                <td>{{ donkey.id }}</td>
+                <td>{{ donkey.nombre }}</td>
+                <td>{{ donkey.years }}</td>
+                <td>{{ donkey.race }}</td>
+                <td>{{ donkey.kilogram }}</td>
+                <td>{{ donkey.createdAt ? donkey.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ donkey.updatedAt ? donkey.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ donkey.deletedAt ? donkey.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ donkey.disponible ? 'Yes' : 'No' }}</td>
+                <td>{{ donkey.maxWeightr }}</td>
+                <td>{{ donkey.photoUrl }}</td>
+                <td>
+                    <a href="{{ path('app_donkey_show', {'id': donkey.id}) }}">show</a>
+                    <a href="{{ path('app_donkey_edit', {'id': donkey.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_donkey_new') }}">Create new</a>
+{% endblock %}

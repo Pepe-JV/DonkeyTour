@@ -39,13 +39,16 @@
                         <span>Home</span>
                     </a>
 
-                    <a href="#" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-stone-500 font-medium hover:bg-stone-100/80 hover:text-[#4A90A4] transition-all duration-300 group">
+                    <a href="#" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-stone-500 font-medium hover:bg-stone-100/80 hover:text-[#8B5E3C] transition-all duration-300 group {{ route == 'app_reservation_index' ? 'text-[#8B5E3C] bg-[#8B5E3C]/10 font-bold' : 'text-stone-500 font-medium hover:bg-stone-100/80 hover:text-[#8B5E3C]' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                         <span>Reservas Globales</span>
                     </a>
-                    
-                    <a href="{{ path('app_donkey_index') }}" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-stone-500 font-medium hover:bg-stone-100/80 hover:text-[#4A90A4] transition-all duration-300 group">
-                        <span class="text-lg grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110">🐴</span>
+
+                   <a href="{{ path('app_donkey_index') }}" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 group {{ route == 'app_donkey_index' ? 'text-[#8B5E3C] bg-[#8B5E3C]/10 font-bold' : 'text-stone-500 font-medium hover:bg-stone-100/80 hover:text-[#8B5E3C]' }}">
+                        <span class="text-lg transition-all duration-300 group-hover:scale-110 group-hover:grayscale-0 group-hover:opacity-100 
+                            {{ route == 'app_donkey_index' ? 'grayscale-0 opacity-100 scale-110' : 'grayscale opacity-70' }}">
+                            🐴
+                        </span>
                         <span>Gestión de Burros</span>
                     </a>
 
@@ -56,7 +59,7 @@
                         <span>Gestionar Empleados</span>
                     </a>
 
-                    <a href="{{ path('app_user_clients') }}" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 group {{ route == 'app_user_clients' ? 'text-[#4A90A4] bg-[#4A90A4]/10 font-bold' : 'text-stone-500 font-medium hover:bg-stone-100/80 hover:text-[#4A90A4]' }}">
+                    <a href="{{ path('app_user_clients') }}" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 group {{ route == 'app_user_clients' ? 'text-[#8B5E3C] bg-[#8B5E3C]/10 font-bold' : 'text-stone-500 font-medium hover:bg-stone-100/80 hover:text-[#8B5E3C]' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                         <span>Gestionar Clientes</span>
                     </a>

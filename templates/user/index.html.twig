@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto py-8 px-4">
+    {# Cabecera de la Lista #}
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-3xl font-extrabold text-[#3E2F28] tracking-tight">{{ title }}</h1>
+            <p class="text-stone-500">Gestión de registros para la plataforma DonkeyTour.</p>
+        </div>
+        
+        {# BOTÓN CLAVE: Pasa el 'type' al controlador para que el 'new' sepa qué es #}
+        <a href="{{ path('app_user_new', {'type': type|default('user')}) }}" 
+           class="inline-flex items-center justify-center gap-2 bg-[#8B5E3C] hover:bg-[#764f32] text-white font-bold px-6 py-3 rounded-2xl shadow-lg transition-all hover:-translate-y-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            Añadir {{ type == 'employee' ? 'Empleado' : (type == 'client' ? 'Cliente' : 'Usuario') }}
+        </a>
+    </div>
+
+    {# Tabla con diseño moderno #}
+    <div class="bg-white rounded-[2rem] shadow-sm border border-stone-100 overflow-hidden">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-stone-50 border-b border-stone-100">
+                    <th class="p-5 text-sm font-bold text-stone-600 uppercase tracking-wider">Nombre</th>
+                    <th class="p-5 text-sm font-bold text-stone-600 uppercase tracking-wider">Email</th>
+                    <th class="p-5 text-sm font-bold text-stone-600 uppercase tracking-wider">NIF</th>
+                    <th class="p-5 text-sm font-bold text-stone-600 uppercase tracking-wider text-right">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-50">
+                {% for user in users %}
+                    <tr class="hover:bg-stone-50/50 transition-colors">
+                        <td class="p-5 font-semibold text-stone-800">{{ user.nombre }}</td>
+                        <td class="p-5 text-stone-600">{{ user.email }}</td>
+                        <td class="p-5 text-stone-600 font-mono text-sm">{{ user.nif }}</td>
+                        <td class="p-5 text-right space-x-3">
+                            <a href="{{ path('app_user_show', {'id': user.id}) }}" class="text-stone-400 hover:text-[#8B5E3C] transition-colors">Ver</a>
+                            <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="text-stone-400 hover:text-[#8B5E3C] transition-colors font-bold">Editar</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="p-12 text-center text-stone-400 italic">No se han encontrado registros en esta categoría.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

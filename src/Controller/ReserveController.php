@@ -8,6 +8,7 @@ use App\Entity\DonkeyReserve;
 use App\Entity\Donkey;
 use App\Entity\Service;
 use App\Entity\Sponsorship;
+use App\Entity\User;
 use App\Repository\ReserveRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\DonkeyRepository;
@@ -303,6 +304,7 @@ final class ReserveController extends AbstractController
 
         $service       = $em->getRepository(Service::class)->find($wizard['service_id']);
         $donkey        = $em->getRepository(Donkey::class)->find($wizard['donkey_id']);
+        /** @var User $user */
         $user          = $this->getUser();
         $isSponsorship = $wizard['is_sponsorship'] ?? false;
 

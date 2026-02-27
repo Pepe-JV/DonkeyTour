@@ -1,58 +1,405 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Service{% endblock %}
+{% block title %}{{ service.type|capitalize }} — DonkeyTour{% endblock %}
+{% block page_title %}Detalle del Servicio{% endblock %}
+
+{# ═══════════════════════════════════════════════════════
+   CONTENIDO REUTILIZABLE
+═══════════════════════════════════════════════════════ #}
+
+{# Mapeo de tipos a datos visuales #}
+{% set stype = service.type|default('service') %}
+{% set type_config = {
+    'tour':        { icon: '🗺️', label: 'Tour',           color: 'amber',   gradient: 'from-amber-600 to-amber-800' },
+    'therapy':     { icon: '💆', label: 'Terapia',         color: 'emerald', gradient: 'from-emerald-600 to-emerald-800' },
+    'despedida':   { icon: '🎉', label: 'Despedida',       color: 'purple',  gradient: 'from-purple-600 to-purple-800' },
+    'sponsorship': { icon: '💚', label: 'Apadrinamiento',  color: 'rose',    gradient: 'from-rose-600 to-rose-800' },
+    'service':     { icon: '⭐', label: 'Servicio',        color: 'sky',     gradient: 'from-sky-600 to-sky-800' }
+} %}
+{% set tc = type_config[stype]|default(type_config['service']) %}
 
 {% block body %}
-    <h1>Service</h1>
+    {# ══════════════════════════════════════════════════════
+       VISTA ADMIN  — Tabla limpia + acciones
+    ══════════════════════════════════════════════════════ #}
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="animate-fade-in-down max-w-4xl mx-auto">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ service.id }}</td>
-            </tr>
-            <tr>
-                <th>Type</th>
-                <td>{{ service.type }}</td>
-            </tr>
-            <tr>
-                <th>BasePrice</th>
-                <td>{{ service.basePrice }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ service.description }}</td>
-            </tr>
-            <tr>
-                <th>Duration</th>
-                <td>{{ service.duration ? service.duration|date('H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>MaxAphor</th>
-                <td>{{ service.maxAphor }}</td>
-            </tr>
-            <tr>
-                <th>Leenguage</th>
-                <td>{{ service.leenguage }}</td>
-            </tr>
-            <tr>
-                <th>DeletedAt</th>
-                <td>{{ service.deletedAt ? service.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ service.updatedAt ? service.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ service.createdAt ? service.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+            {# Cabecera #}
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                <div>
+                    <a href="{{ path('app_admin_service_index') }}" class="inline-flex items-center gap-1 text-sm text-stone-400 hover:text-[#8B5E3C] font-medium mb-2 transition-colors">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                        Volver a servicios
+                    </a>
+                    <h1 class="text-2xl md:text-3xl font-bold text-[#3E2F28]">
+                        {{ tc.icon }} {{ service.type == 'tour' and service.name is defined and service.name ? service.name : tc.label }}
+                    </h1>
+                </div>
+                <div class="flex gap-3">
+                    <a href="{{ path('app_service_edit', {'id': service.id}) }}" class="px-5 py-2.5 bg-[#4A90A4] hover:bg-[#3d7a8c] text-white font-bold rounded-xl transition-all text-sm">Editar</a>
+                    {{ include('service/_delete_form.html.twig') }}
+                </div>
+            </div>
 
-    <a href="{{ path('app_service_index') }}">back to list</a>
+            {# Info Card #}
+            <div class="bg-white/80 backdrop-blur-xl border border-stone-100 rounded-3xl p-8 shadow-[0_10px_30px_rgba(139,94,60,0.05)]">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-    <a href="{{ path('app_service_edit', {'id': service.id}) }}">edit</a>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Tipo</p>
+                            <span class="inline-block px-3 py-1 bg-{{ tc.color }}-100 text-{{ tc.color }}-800 text-xs font-bold rounded-full uppercase">{{ tc.label }}</span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Precio Base</p>
+                            <p class="text-2xl font-bold text-[#3E2F28]">{{ service.basePrice|number_format(2, ',', '.') }} €</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Duración</p>
+                            <p class="text-lg font-semibold text-[#3E2F28]">{{ service.duration ? service.duration|date('H:i') ~ 'h' : '—' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Máx. personas</p>
+                            <p class="text-lg font-semibold text-[#3E2F28]">{{ service.maxAphor }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Idioma</p>
+                            <p class="text-lg font-semibold text-[#3E2F28]">{{ service.leenguage|default('—') }}</p>
+                        </div>
+                    </div>
 
-    {{ include('service/_delete_form.html.twig') }}
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Descripción</p>
+                            <p class="text-stone-600 leading-relaxed">{{ service.description }}</p>
+                        </div>
+
+                        {# Campos específicos por tipo #}
+                        {% if service.type == 'tour' %}
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Itinerario</p>
+                                <p class="text-stone-600 leading-relaxed">{{ service.itinerary }}</p>
+                            </div>
+                            <div class="flex gap-6">
+                                <div>
+                                    <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Paradas</p>
+                                    <p class="text-lg font-semibold text-[#3E2F28]">{{ service.stops }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Audio-guía</p>
+                                    <p class="text-lg font-semibold text-[#3E2F28]">{{ service.audioExplanation ? 'Sí' : 'No' }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if service.type == 'therapy' %}
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Lugar</p>
+                                <p class="text-lg font-semibold text-[#3E2F28]">{{ service.place }}</p>
+                            </div>
+                        {% endif %}
+
+                        {% if service.type == 'despedida' %}
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Temática</p>
+                                <p class="text-lg font-semibold text-[#3E2F28]">{{ service.tematica }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Lugar</p>
+                                <p class="text-lg font-semibold text-[#3E2F28]">{{ service.place }}</p>
+                            </div>
+                        {% endif %}
+
+                        {# Detalles extra (común a Tour, Therapy, Despedida, Sponsorship) #}
+                        {% if service.details is defined and service.details %}
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Detalles adicionales</p>
+                                <p class="text-stone-600 leading-relaxed">{{ service.details }}</p>
+                            </div>
+                        {% endif %}
+
+                        {# Burro asignado #}
+                        {% if service.donkey %}
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Burro asignado</p>
+                                <p class="text-lg font-semibold text-[#3E2F28]">🐴 {{ service.donkey.nombre }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-stone-100 flex gap-6 text-xs text-stone-400">
+                    <span>Creado: {{ service.createdAt ? service.createdAt|date('d/m/Y H:i') : '—' }}</span>
+                    <span>Actualizado: {{ service.updatedAt ? service.updatedAt|date('d/m/Y H:i') : '—' }}</span>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+{# ══════════════════════════════════════════════════════
+   VISTA PÚBLICA / CLIENTE
+══════════════════════════════════════════════════════ #}
+{% block client_body %}
+    {% if not is_granted('ROLE_ADMIN') %}
+        <div class="bg-[#FCFAF7] min-h-screen">
+
+            {# ── HERO con gradiente ── #}
+            <div class="relative h-[50vh] md:h-[60vh] flex items-end overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/70 z-10"></div>
+                <img src="{{ asset('img/burroBanner.png') }}"
+                     alt="{{ tc.label }}"
+                     class="absolute inset-0 w-full h-full object-cover object-center">
+
+                <div class="relative z-20 w-full max-w-7xl mx-auto px-6 pb-12">
+                    <a href="{{ path('app_service_index') }}" class="inline-flex items-center gap-1.5 text-white/70 hover:text-white text-sm font-medium mb-6 transition-colors">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                        Volver a Servicios
+                    </a>
+
+                    <div class="flex flex-wrap items-center gap-3 mb-4">
+                        <span class="bg-white/20 backdrop-blur-md text-white px-4 py-1.5 text-xs font-bold uppercase tracking-widest rounded-full border border-white/25">
+                            {{ tc.icon }} {{ tc.label }}
+                        </span>
+                        {% if service.leenguage %}
+                            <span class="bg-white/15 backdrop-blur-md text-white/90 px-3 py-1 text-xs font-medium rounded-full border border-white/15">
+                                🌐 {{ service.leenguage }}
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <h1 class="text-3xl md:text-5xl font-bold text-white tracking-tight leading-tight drop-shadow-lg">
+                        {% if service.type == 'tour' and service.name is defined and service.name %}
+                            {{ service.name }}
+                        {% else %}
+                            {{ tc.label }}
+                        {% endif %}
+                    </h1>
+                </div>
+            </div>
+
+            {# ── TARJETAS RESUMEN FLOTANTES ── #}
+            <div class="max-w-7xl mx-auto px-6 -mt-10 relative z-30 mb-12">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-white rounded-2xl p-5 shadow-lg border border-stone-100 text-center">
+                        <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Precio</p>
+                        <p class="text-2xl font-bold text-[#3E2F28]">{{ service.basePrice|number_format(2, ',', '.') }}€</p>
+                        {% if not service.isSponsorship() %}
+                            <p class="text-[10px] text-stone-400 font-medium">por persona</p>
+                        {% else %}
+                            <p class="text-[10px] text-stone-400 font-medium">cuota mensual</p>
+                        {% endif %}
+                    </div>
+                    <div class="bg-white rounded-2xl p-5 shadow-lg border border-stone-100 text-center">
+                        <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Duración</p>
+                        <p class="text-2xl font-bold text-[#3E2F28]">{{ service.duration ? service.duration|date('H:i') : '—' }}</p>
+                        <p class="text-[10px] text-stone-400 font-medium">horas</p>
+                    </div>
+                    {% if not service.isSponsorship() %}
+                        <div class="bg-white rounded-2xl p-5 shadow-lg border border-stone-100 text-center">
+                            <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Grupo máx.</p>
+                            <p class="text-2xl font-bold text-[#3E2F28]">{{ service.maxAphor }}</p>
+                            <p class="text-[10px] text-stone-400 font-medium">personas</p>
+                        </div>
+                    {% endif %}
+                    {% if service.type == 'tour' %}
+                        <div class="bg-white rounded-2xl p-5 shadow-lg border border-stone-100 text-center">
+                            <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Paradas</p>
+                            <p class="text-2xl font-bold text-[#3E2F28]">{{ service.stops }}</p>
+                            <p class="text-[10px] text-stone-400 font-medium">puntos de interés</p>
+                        </div>
+                    {% endif %}
+                    {% if service.donkey %}
+                        <div class="bg-white rounded-2xl p-5 shadow-lg border border-stone-100 text-center">
+                            <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-1">Compañero</p>
+                            <p class="text-2xl font-bold text-[#3E2F28]">🐴</p>
+                            <p class="text-[10px] text-stone-400 font-medium">{{ service.donkey.nombre }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# ── CONTENIDO PRINCIPAL ── #}
+            <div class="max-w-7xl mx-auto px-6 pb-24">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+                    {# ── Columna izquierda: Descripción y detalles ── #}
+                    <div class="lg:col-span-2 space-y-10">
+
+                        {# Descripción #}
+                        <section>
+                            <h2 class="text-2xl font-bold text-[#3E2F28] mb-4 flex items-center gap-2">
+                                <span class="w-8 h-8 bg-{{ tc.color }}-100 rounded-lg flex items-center justify-center text-sm">📝</span>
+                                Descripción
+                            </h2>
+                            <div class="bg-white rounded-3xl p-8 border border-stone-100 shadow-sm">
+                                <p class="text-stone-600 text-lg leading-relaxed whitespace-pre-line">{{ service.description }}</p>
+                            </div>
+                        </section>
+
+                        {# Itinerario (solo Tours) #}
+                        {% if service.type == 'tour' and service.itinerary is defined and service.itinerary %}
+                            <section>
+                                <h2 class="text-2xl font-bold text-[#3E2F28] mb-4 flex items-center gap-2">
+                                    <span class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center text-sm">🗺️</span>
+                                    Itinerario
+                                </h2>
+                                <div class="bg-white rounded-3xl p-8 border border-stone-100 shadow-sm">
+                                    <p class="text-stone-600 leading-relaxed whitespace-pre-line">{{ service.itinerary }}</p>
+                                </div>
+                            </section>
+                        {% endif %}
+
+                        {# Detalles extra (disponible en Tour, Therapy, Despedida, Sponsorship) #}
+                        {% if service.details is defined and service.details %}
+                            <section>
+                                <h2 class="text-2xl font-bold text-[#3E2F28] mb-4 flex items-center gap-2">
+                                    <span class="w-8 h-8 bg-{{ tc.color }}-100 rounded-lg flex items-center justify-center text-sm">📋</span>
+                                    Detalles adicionales
+                                </h2>
+                                <div class="bg-white rounded-3xl p-8 border border-stone-100 shadow-sm">
+                                    <p class="text-stone-600 leading-relaxed whitespace-pre-line">{{ service.details }}</p>
+                                </div>
+                            </section>
+                        {% endif %}
+
+                        {# Info específica: Despedida #}
+                        {% if service.type == 'despedida' %}
+                            <section>
+                                <h2 class="text-2xl font-bold text-[#3E2F28] mb-4 flex items-center gap-2">
+                                    <span class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center text-sm">🎉</span>
+                                    Información de la Despedida
+                                </h2>
+                                <div class="bg-white rounded-3xl p-8 border border-stone-100 shadow-sm">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        <div>
+                                            <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-2">Temática</p>
+                                            <p class="text-lg font-semibold text-[#3E2F28]">{{ service.tematica }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-2">Lugar</p>
+                                            <p class="text-lg font-semibold text-[#3E2F28]">{{ service.place }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        {% endif %}
+
+                        {# Info específica: Terapia #}
+                        {% if service.type == 'therapy' %}
+                            <section>
+                                <h2 class="text-2xl font-bold text-[#3E2F28] mb-4 flex items-center gap-2">
+                                    <span class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center text-sm">💆</span>
+                                    Información de la Terapia
+                                </h2>
+                                <div class="bg-white rounded-3xl p-8 border border-stone-100 shadow-sm">
+                                    <p class="text-xs font-bold uppercase tracking-widest text-stone-400 mb-2">Lugar de realización</p>
+                                    <p class="text-lg font-semibold text-[#3E2F28]">{{ service.place }}</p>
+                                </div>
+                            </section>
+                        {% endif %}
+
+                        {# Info específica: Tour — Audio guía #}
+                        {% if service.type == 'tour' %}
+                            <section>
+                                <h2 class="text-2xl font-bold text-[#3E2F28] mb-4 flex items-center gap-2">
+                                    <span class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center text-sm">🎧</span>
+                                    Características del Tour
+                                </h2>
+                                <div class="bg-white rounded-3xl p-8 border border-stone-100 shadow-sm">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl {{ service.audioExplanation ? 'bg-emerald-100' : 'bg-stone-100' }}">
+                                                {{ service.audioExplanation ? '🎧' : '🔇' }}
+                                            </div>
+                                            <div>
+                                                <p class="text-xs font-bold uppercase tracking-widest text-stone-400">Audio-guía</p>
+                                                <p class="text-lg font-semibold text-[#3E2F28]">{{ service.audioExplanation ? 'Incluida' : 'No incluida' }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-xl">📍</div>
+                                            <div>
+                                                <p class="text-xs font-bold uppercase tracking-widest text-stone-400">Paradas</p>
+                                                <p class="text-lg font-semibold text-[#3E2F28]">{{ service.stops }} puntos de interés</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        {% endif %}
+                    </div>
+
+                    {# ── Columna derecha: Sidebar (CTA + Info) ── #}
+                    <div class="space-y-6">
+
+                        {# Card de Reserva #}
+                        <div class="bg-white rounded-3xl p-8 border border-stone-100 shadow-lg sticky top-32">
+                            <div class="text-center mb-6">
+                                <p class="text-3xl font-bold text-[#3E2F28]">{{ service.basePrice|number_format(2, ',', '.') }}€</p>
+                                {% if not service.isSponsorship() %}
+                                    <p class="text-sm text-stone-400 font-medium">por persona</p>
+                                {% else %}
+                                    <p class="text-sm text-stone-400 font-medium">cuota mensual</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center gap-3 text-sm text-stone-600">
+                                    <svg class="w-5 h-5 text-[#4A90A4]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                    <span>Duración: <strong>{{ service.duration ? service.duration|date('H:i') ~ 'h' : '—' }}</strong></span>
+                                </div>
+                                {% if not service.isSponsorship() %}
+                                    <div class="flex items-center gap-3 text-sm text-stone-600">
+                                        <svg class="w-5 h-5 text-[#4A90A4]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                                        <span>Grupo máx: <strong>{{ service.maxAphor }} personas</strong></span>
+                                    </div>
+                                {% endif %}
+                                {% if service.leenguage %}
+                                    <div class="flex items-center gap-3 text-sm text-stone-600">
+                                        <svg class="w-5 h-5 text-[#4A90A4]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>
+                                        <span>Idioma: <strong>{{ service.leenguage }}</strong></span>
+                                    </div>
+                                {% endif %}
+                                {% if service.donkey %}
+                                    <div class="flex items-center gap-3 text-sm text-stone-600">
+                                        <span class="text-lg">🐴</span>
+                                        <span>Compañero: <strong>{{ service.donkey.nombre }}</strong></span>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="space-y-3">
+                                {% if app.user %}
+                                    <a href="{{ path('app_reserve_step1') }}"
+                                       class="block w-full text-center px-6 py-4 bg-[#8B5E3C] hover:bg-[#764f32] text-white font-bold rounded-2xl transition-all duration-300 shadow-lg shadow-amber-900/20 transform hover:-translate-y-0.5">
+                                        {% if service.isSponsorship() %}
+                                            Apadrinar ahora
+                                        {% else %}
+                                            Reservar ahora
+                                        {% endif %}
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('app_login') }}"
+                                       class="block w-full text-center px-6 py-4 bg-[#8B5E3C] hover:bg-[#764f32] text-white font-bold rounded-2xl transition-all duration-300 shadow-lg shadow-amber-900/20 transform hover:-translate-y-0.5">
+                                        Inicia sesión para reservar
+                                    </a>
+                                {% endif %}
+
+                                <a href="{{ path('app_service_index') }}"
+                                   class="block w-full text-center px-6 py-3 border-2 border-stone-200 text-[#3E2F28] font-bold rounded-2xl hover:border-[#4A90A4] hover:text-[#4A90A4] hover:bg-[#4A90A4]/5 transition-all duration-300">
+                                    Ver todos los servicios
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    {% endif %}
 {% endblock %}

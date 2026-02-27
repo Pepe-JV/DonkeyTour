@@ -24,11 +24,6 @@ class Tour extends Service
     #[ORM\Column]
     private ?bool $audioExplanation = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getName(): ?string
     {
         return $this->name;

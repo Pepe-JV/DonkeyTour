@@ -20,7 +20,7 @@ final class ApiController extends AbstractController
         foreach ($services as $service) {
             $item = [
                 'id'          => $service->getId(),
-                'type'        => $service->getType(),
+                'type'        => strtolower($service->getType()),
                 'basePrice'   => $service->getBasePrice(),
                 'description' => $service->getDescription(),
                 'duration'    => $service->getDuration()?->format('H:i'),

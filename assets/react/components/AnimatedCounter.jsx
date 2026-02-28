@@ -38,15 +38,15 @@ export default function AnimatedCounter({ target, label, icon, suffix = '' }) {
     return (
         <div
             ref={ref}
-            className="bg-white/90 backdrop-blur-xl border border-stone-100 rounded-[2rem] p-8 shadow-[0_15px_40px_rgba(0,0,0,0.06)] text-center group hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] transition-all duration-300"
+            className="text-center group transition-all duration-300"
         >
-            <div className="w-14 h-14 bg-[#8B5E3C]/10 rounded-2xl flex items-center justify-center text-2xl mb-4 mx-auto group-hover:scale-110 transition-transform">
+            <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-2xl mb-4 mx-auto group-hover:scale-110 transition-transform">
                 {icon}
             </div>
-            <p className="text-4xl font-bold text-[#3E2F28] tabular-nums">
+            <p className="text-4xl md:text-5xl font-bold text-white tabular-nums">
                 {count > 0 ? '+' : ''}{count}{suffix}
             </p>
-            <p className="text-stone-400 text-sm font-medium mt-1 uppercase tracking-wider">{label}</p>
+            <p className="text-white/60 text-xs font-bold mt-2 uppercase tracking-widest">{label}</p>
         </div>
     );
 }
@@ -72,7 +72,7 @@ export function CounterGroup() {
     if (counters.length === 0) return null;
 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {counters.map((c, i) => (
                 <AnimatedCounter
                     key={i}
